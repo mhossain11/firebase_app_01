@@ -4,7 +4,7 @@ class AdminHomeService{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   /// 🔹 Get total number of users where role is 'user' (case-insensitive)
-  Future<int> getTotalUserCount() async {
+  Future<int> getTotalUserCount(String roleName) async {
     try {
       // Step 1: Get all documents from 'users'
       QuerySnapshot snapshot = await _firestore.collection('users').get();
@@ -12,7 +12,7 @@ class AdminHomeService{
       // Step 2: Filter manually (case-insensitive check)
       final filtered = snapshot.docs.where((doc) {
         final role = (doc['role'] ?? '').toString().toLowerCase();
-        return role == 'user';
+        return role == roleName;
       }).toList();
 
       // Step 3: Return total count

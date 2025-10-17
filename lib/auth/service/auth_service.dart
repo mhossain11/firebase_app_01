@@ -69,7 +69,8 @@ class AuthService {
      // ✅ Save user info locally using SharedPreferences
      await CacheHelper().setLoggedIn(userDoc.exists);
      await CacheHelper().setString('isRole',userDoc['role'].toString());
-
+     await CacheHelper().setString('userDocId',userDoc.id.toString());
+      print('userDocId:${userDoc.id.toString()}');
      if (userDoc.exists) {
        return userDoc['role'] as String;
      } else {
