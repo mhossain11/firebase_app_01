@@ -41,10 +41,11 @@ class SavingMoneyService {
       final docRef= await _firestore
           .collection('users')
           .doc(userDocId)
-          .collection('Money')
+          .collection('note')
 
           .add({
-        'amount': amount,
+        'title': 'amount',
+        'message': "Timestamp.now()",
         'date&time': Timestamp.now(),
       });
       await CacheHelper().setString('moneyDocRef', docRef.id);

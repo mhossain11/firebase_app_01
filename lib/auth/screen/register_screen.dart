@@ -23,7 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isLoading = false;
     final AuthService _authService = AuthService();
 
-    void _signUp() async {
+  Future<String?> _signUp() async {
       setState(() {
         isLoading = true;
       });
@@ -33,19 +33,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: passwordController.text,
           role: selectedRole,
         user_id: useridController.text,
-
       );
       setState(() {
         isLoading = false;
       });
-      if(result != null){
+      if(result == 'success' ){
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-            content: Text('Signup Successful! Now Turn to Login')));
-
+          SnackBar(content: Text('Signup Successful!')),
+        );
         Navigator.pushReplacement(context, MaterialPageRoute(
             builder: (_)=>LoginScreen()));
-      }else{
+      }else if(result != null && result.contains('email')){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result)),
+        );
+      }
+      else{
         //error
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

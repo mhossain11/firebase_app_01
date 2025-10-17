@@ -4,6 +4,7 @@ import 'package:firebase_pwa_app_01/admin/save_money/model/usermodel.dart';
 import 'package:flutter/material.dart';
 
 import '../../../auth/widgets/text_field.dart';
+import '../../home/service/adminhome_service.dart';
 import '../service/saving_money_service.dart';
 
 class SavingMoneyScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _SavingMoneyScreenState extends State<SavingMoneyScreen> {
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final SavingMoneyService _savingMoneyService = SavingMoneyService();
+        final AdminHomeService _adminHomeService = AdminHomeService();
   UserModel? _userData;
   String? currentAmount ;
   bool _isLoading = false;
@@ -162,8 +164,10 @@ class _SavingMoneyScreenState extends State<SavingMoneyScreen> {
                     Container(
                         padding:EdgeInsets.all(5),
                         width: 200,
-                        child: ElevatedButton(onPressed: (){
+                        child: ElevatedButton(
+                            onPressed: (){
                           _handleAddMoney();
+                          _adminHomeService.getAllUsersTotalAmountStream();
                           setState(() {
                             visibleData=true;
                             editVisible = true;

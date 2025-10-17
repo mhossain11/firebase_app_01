@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_pwa_app_01/admin/note/screen/note_screen.dart';
 import 'package:firebase_pwa_app_01/cachehelper/chechehelper.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class AdminHomeScreen extends StatefulWidget {
 
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-   AdminHomeService _adminHomeService = AdminHomeService();
+   final AdminHomeService _adminHomeService = AdminHomeService();
   bool _isLoading = true;
   int userTotal =0;
   int adminTotal =0;
@@ -62,6 +63,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
 
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +100,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           ),
         ],
       ),
-      
+
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -175,25 +177,34 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                   height: 100,
                   width: 300,
                   decoration: BoxDecoration(
-                      color: Colors.green.shade100,
-                      borderRadius: BorderRadius.circular(10)
+                    color: Colors.green.shade100,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('20000 Tk',style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold
-                      ),),
-                      Text('Total Amount',style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700
-                      ),),
-                    ],
+                  child: Center(
+                    child: StreamBuilder<int>(
+                      stream: _adminHomeService.getAllUsersTotalAmountStream(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
+                        final totalAmount = snapshot.data ?? 0;
+                        return Text(
+                          '$totalAmount Tk',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        );
+                      },
+                    )
+
+
+                    ,
                   ),
                 ),
               ),
-            ),
+            )
+            ,
 
             Row(
               children: [
@@ -222,7 +233,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                           Text('Saving Money',style: TextStyle(
                               fontSize: 16,color: Colors.white
                           ),)
-        
+
                         ],
                       ),
                     ),
@@ -338,8 +349,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             //Note button
             GestureDetector(
               onTap: (){
-                /*Navigator.push(context, MaterialPageRoute(
-                    builder: (context)=>SavingMoneyScreen()));*/
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context)=>NoteScreen()));
               },
               child: Padding(
                 padding: const EdgeInsets.all(14.0),

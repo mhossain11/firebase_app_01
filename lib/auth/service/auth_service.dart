@@ -40,7 +40,11 @@ class AuthService {
 
       return  userCredential.user!.uid;
     }on FirebaseAuthException catch (e) {
-      return e.message;
+      if (e.code == 'email-already-in-use') {
+        return 'এই ইমেইলটি ইতিমধ্যে ব্যবহার করা হয়েছে';
+      } else {
+        return e.message;
+      }
     } catch (e) {
       return e.toString();
     }
