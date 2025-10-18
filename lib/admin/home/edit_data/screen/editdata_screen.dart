@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../auth/widgets/text_field.dart';
+import '../../../log/service/log_service.dart';
 import '../service/editdata_service.dart';
 
 class EditDataScreen extends StatefulWidget {
@@ -22,8 +23,11 @@ class EditDataScreen extends StatefulWidget {
 class _EditDataScreenState extends State<EditDataScreen> {
   final TextEditingController _amountController = TextEditingController();
   final EditDataService _editService =EditDataService();
+  final LogService _logService = LogService();
   bool _isLoading = false;
   String? _error;
+
+
   @override
   void initState() {
     super.initState();
@@ -81,7 +85,17 @@ class _EditDataScreenState extends State<EditDataScreen> {
           Container(
             padding:EdgeInsets.all(5),
             width: 200,
-            child: ElevatedButton(onPressed: _updateMoney,
+            child: ElevatedButton(onPressed:()async{
+              _updateMoney();
+              await _logService.addLog(
+                name: widget.name,
+                email: widget.email,
+                userid: widget.userId,
+                oldData: widget.money,
+                newData: _amountController.text,
+                note: 'Update Money'
+              );
+            } ,
                 child: const Text('Update Money')),
           ),
 

@@ -20,7 +20,8 @@ class EditDataService{
 
     final userDocId = snapshot.docs.first.id;
 
-   final moneyDocId= await CacheHelper().getString('moneyDocRef');
+   final moneyDocId= await CacheHelper().getString('moneyDocID');
+   print('moneyDocID2: $moneyDocId');
 
     // Update Money document
     await _firestore

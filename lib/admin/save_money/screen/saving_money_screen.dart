@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../auth/widgets/text_field.dart';
 import '../../home/service/adminhome_service.dart';
+import '../../log/service/log_service.dart';
 import '../service/saving_money_service.dart';
 
 class SavingMoneyScreen extends StatefulWidget {
@@ -18,7 +19,8 @@ class _SavingMoneyScreenState extends State<SavingMoneyScreen> {
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final SavingMoneyService _savingMoneyService = SavingMoneyService();
-        final AdminHomeService _adminHomeService = AdminHomeService();
+  final AdminHomeService _adminHomeService = AdminHomeService();
+  final LogService _logService = LogService();
   UserModel? _userData;
   String? currentAmount ;
   bool _isLoading = false;
@@ -165,9 +167,17 @@ class _SavingMoneyScreenState extends State<SavingMoneyScreen> {
                         padding:EdgeInsets.all(5),
                         width: 200,
                         child: ElevatedButton(
-                            onPressed: (){
+                            onPressed: ()async{
                           _handleAddMoney();
                           _adminHomeService.getAllUsersTotalAmountStream();
+                          await _logService.addLog(
+                              name: _userData?.name ?? 'Unknown',
+                              email: _userData?.email ?? 'N/A',
+                              userid: _userData?.userid ?? 'N/A',
+                              oldData: currentAmount ?? '0',
+                              newData: _amountController.text,
+                                note: 'Add Money'
+                          );
                           setState(() {
                             visibleData=true;
                             editVisible = true;
@@ -183,7 +193,8 @@ class _SavingMoneyScreenState extends State<SavingMoneyScreen> {
                           padding:EdgeInsets.all(5),
                           width: 200,
                           child: ElevatedButton(onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>EditDataScreen(
+                            Navigator.push(context, MaterialPageRoute(builder: (context)
+                            =>EditDataScreen(
                               name: _userData!.name,
                               email: _userData!.email,
                               userId: _userData!.userid,

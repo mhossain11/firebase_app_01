@@ -7,6 +7,7 @@ import 'package:firebase_pwa_app_01/cachehelper/chechehelper.dart';
 import 'package:flutter/material.dart';
 
 import '../../../auth/screen/login_screen.dart';
+import '../../log/screen/log_screen.dart';
 import '../../moneydelete/screen/moneydelete_screen.dart';
 import '../../save_money/screen/saving_money_screen.dart';
 import '../../userlist/screen/userlist_screen.dart';
@@ -282,7 +283,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 GestureDetector(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (context)=>SavingMoneyScreen()));
+                        builder: (context)=>LogScreen()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
